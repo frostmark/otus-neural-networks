@@ -2,12 +2,9 @@ import torch
 from torch import utils
 from torchvision import datasets, transforms
 
-import matplotlib
-import matplotlib.pyplot as plt
 import numpy as np
 
 path='./MNIST_data'
-
 
 transform = transforms.Compose([
     transforms.ToTensor(),
