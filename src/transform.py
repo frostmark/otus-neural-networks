@@ -5,21 +5,26 @@ from torchvision import datasets, transforms
 path='./MNIST_data'
 
 class CustomTransform():
-    def __init__(self):
+    def __init__(self, base_mean, base_std):
+        self.base_mean = base_mean
+        self.base_std = base_std
         pass
 
     def __call__(self, tensor):
         mean = torch.mean(tensor)
         std = torch.std(tensor)
 
-        return (tensor - mean)/std
+        return (tensor - self.base_mean) / self.base_std
 
-transform = transforms.Compose([
-    transforms.ToTensor(),
-    CustomTransform(),
-])
 
-def mnist(batch_size=10, shuffle=False, transform=transform, path='./MNIST_data'):
+def mnist(batch_size=10, shuffle=False, path='./MNIST_data'):
+    base_data = datasets.MNIST(path, train=True, download=True, transform=transforms.ToTensor())
+
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        CustomTransform(torch.mean(base_data[0][0]), torch.std(base_data[0][0])),
+    ])
+
     train_data = datasets.MNIST(path, train=True, download=True, transform=transform)
     train_loader = utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=shuffle)
 
