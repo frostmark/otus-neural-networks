@@ -4,7 +4,6 @@ from torchvision import datasets, transforms
 
 path = './MNIST_data'
 
-
 class CustomTransform():
     def __init__(self, base_mean, base_std):
         self.base_mean = base_mean
